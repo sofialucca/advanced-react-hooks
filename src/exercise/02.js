@@ -21,9 +21,9 @@ function useSafeDispatch(dispatch){
     }
   },[])
 
-  return React.useCallback((...arg)=>{
+  return React.useCallback((...args)=>{
     if(mountedRef.current){
-      dispatrch(...args);
+      dispatch(...args);
     }
   },[dispatch]);
 }
@@ -66,7 +66,7 @@ function useAsync(initialState){
     ...initialState,
   })
 
-  const disptach = useSafeDispatch(unsafeDispatch);
+  const dispatch = useSafeDispatch(unsafeDispatch);
 
   //extra 1
   // React.useEffect(() => {

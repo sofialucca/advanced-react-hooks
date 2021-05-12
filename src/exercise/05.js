@@ -4,34 +4,41 @@
 import * as React from 'react'
 
 // 🐨 wrap this in a React.forwardRef and accept `ref` as the second argument
-function MessagesDisplay({messages}) {
-  const containerRef = React.useRef()
-  React.useLayoutEffect(() => {
-    scrollToBottom()
-  })
+function MessagesDisplay({messages},ref){
+    const containerRef = React.useRef()
+    React.useLayoutEffect(() => {
+      scrollToBottom()
+    })
 
-  // 💰 you're gonna want this as part of your imperative methods
-  // function scrollToTop() {
-  //   containerRef.current.scrollTop = 0
-  // }
+    // 💰 you're gonna want this as part of your imperative methods
+  function scrollToTop() {
+        containerRef.current.scrollTop = 0
+      }
+      
   function scrollToBottom() {
-    containerRef.current.scrollTop = containerRef.current.scrollHeight
-  }
-
-  // 🐨 call useImperativeHandle here with your ref and a callback function
-  // that returns an object with scrollToTop and scrollToBottom
+        containerRef.current.scrollTop = containerRef.current.scrollHeight
+      }
+  React.useImperativeHandle(ref, () => ({
+    scrollToTop, 
+    scrollToBottom})
+  )
+    // 🐨 call useImperativeHandle here with your ref and a callback function
+    // that returns an object with scrollToTop and scrollToBottom
 
   return (
-    <div ref={containerRef} role="log">
-      {messages.map((message, index, array) => (
-        <div key={message.id}>
-          <strong>{message.author}</strong>: <span>{message.content}</span>
-          {array.length - 1 === index ? null : <hr />}
-        </div>
-      ))}
-    </div>
+      <div ref={containerRef} role="log">
+        {messages.map((message, index, array) => (
+          <div key={message.id}>
+            <strong>{message.author}</strong>: <span>{message.content}</span>
+            {array.length - 1 === index ? null : <hr />}
+          </div>
+        ))}
+      </div>
   )
 }
+
+
+MessagesDisplay =  React.forwardRef(MessagesDisplay);
 
 function App() {
   const messageDisplayRef = React.useRef()
